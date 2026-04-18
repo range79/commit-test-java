@@ -1,0 +1,17 @@
+name: Auto Commit
+on:
+  schedule: [{cron: '0 * * * *'}] # Runs every hour
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Automation
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > id_rsa && chmod 600 id_rsa
+          chmod +x auto-commiter
+          ./auto-commiter
+        env:
+          GITHUB_REPO_URL: ${{ secrets.REPO_URL }}
+          GITHUB_SSH_KEY_PATH: "./id_rsa"
