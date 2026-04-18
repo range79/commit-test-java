@@ -1,5 +1,3 @@
-name: Auto Commit
-
 on:
   schedule:
     - cron: '0 * * * *'
@@ -24,5 +22,5 @@ jobs:
           chmod +x auto-commiter
           ./auto-commiter
         env:
-          GITHUB_REPO_URL: git@github.com:${{ github.repository }}.git
-          GITHUB_SSH_KEY_PATH: ~/.ssh/id_rsa
+          REPO_URL: git@github.com:${{ github.repository }}.git
+          SSH_KEY_PATH: ~/.ssh/id_rsa
