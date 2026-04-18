@@ -1,17 +1,28 @@
 name: Auto Commit
+
 on:
-  schedule: [{cron: '0 * * * *'}] # Runs every hour
+  schedule:
+    - cron: '0 * * * *'
   workflow_dispatch:
+
 jobs:
   run:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
       - name: Run Automation
         run: |
-          echo "${{ secrets.SSH_KEY }}" > id_rsa && chmod 600 id_rsa
           chmod +x auto-commiter
           ./auto-commiter
         env:
-          GITHUB_REPO_URL: ${{ secrets.REPO_URL }}
-          GITHUB_SSH_KEY_PATH: "./id_rsa"
+          GITHUB_REPO_URL: git@github.com:${{ github.repository }}.git
+          GITHUB_SSH_KEY_PATH: ~/.ssh/id_rsa
