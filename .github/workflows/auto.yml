@@ -19,6 +19,9 @@ jobs:
 
       - name: Run Automation
         run: |
+          # Switch remote from HTTPS to SSH so the bot can use the SSH Key
+          git remote set-url origin git@github.com:${{ github.repository }}.git
+          
           chmod +x auto-commiter
           ./auto-commiter
         env:
